@@ -10,18 +10,22 @@ export default async function handler(req, res) {
   }
 
  const prompt = `
-You are a product data assistant.
+You are a product matching assistant.
 
-Find the most likely product matches for the following information across these retailers:
+Your job is to search across these websites and return the most likely matching product links with prices:
 - Home Depot
-- Lowe’s
+- Lowe's
 - Amazon
-- Tractor Supply Co
-- McCoy’s Building Supply
+- Tractor Supply
+- McCoy's Building Supply
 
-Only return links to product pages and their prices, if available.
+The product is:
+- Description: ${description}
+- Manufacturer Code: ${manufacturerCode}
 
-Respond **strictly in JSON** in the following format (no markdown, no explanations):
+Search using keywords from the description and UPC/manufacturer code when available. If an exact match is not found, provide the closest relevant product that matches brand and type.
+
+Return only this JSON (no markdown, no commentary):
 
 {
   "HDURL": { "url": "https://...", "price": "$00.00" },
@@ -32,12 +36,9 @@ Respond **strictly in JSON** in the following format (no markdown, no explanatio
   "OTHERURL": { "url": "https://...", "price": "$00.00" }
 }
 
-Leave a field empty only if you're confident no match is available.
-
-Product Info:
-Manufacturer Code: ${manufacturerCode}
-Description: ${description}
+Leave fields empty only if no relevant or similar product can be found.
 `;
+
 
 
   try {
