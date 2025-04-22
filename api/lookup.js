@@ -9,25 +9,36 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing manufacturerCode or description' });
   }
 
-  const prompt = `
-You are an assistant helping match retail product listings.
-Based on the data provided below, find product page URLs and prices from the following retailers:
-Home Depot, Lowe's, Amazon, Tractor Supply, McCoy's Building Supply.
+ const prompt = `
+You are a product data assistant.
 
-Respond ONLY in JSON using this exact structure:
+Find the most likely product matches for the following information across these retailers:
+- Home Depot
+- Lowe’s
+- Amazon
+- Tractor Supply Co
+- McCoy’s Building Supply
+
+Only return links to product pages and their prices, if available.
+
+Respond **strictly in JSON** in the following format (no markdown, no explanations):
+
 {
-  "HDURL": { "url": "URL here", "price": "$00.00" },
-  "LURL": { "url": "URL here", "price": "$00.00" },
-  "AMZNURL": { "url": "URL here", "price": "$00.00" },
-  "TSCURL": { "url": "URL here", "price": "$00.00" },
-  "MCURL": { "url": "URL here", "price": "$00.00" },
-  "OTHERURL": { "url": "URL here", "price": "$00.00" }
+  "HDURL": { "url": "https://...", "price": "$00.00" },
+  "LURL": { "url": "https://...", "price": "$00.00" },
+  "AMZNURL": { "url": "https://...", "price": "$00.00" },
+  "TSCURL": { "url": "https://...", "price": "$00.00" },
+  "MCURL": { "url": "https://...", "price": "$00.00" },
+  "OTHERURL": { "url": "https://...", "price": "$00.00" }
 }
-Leave fields empty if not found.
 
+Leave a field empty only if you're confident no match is available.
+
+Product Info:
 Manufacturer Code: ${manufacturerCode}
 Description: ${description}
 `;
+
 
   try {
     const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
