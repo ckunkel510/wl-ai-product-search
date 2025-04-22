@@ -55,7 +55,15 @@ Description: ${description}
       const parsed = JSON.parse(content);
       return res.status(200).json(parsed);
     } catch (err) {
-      return res.status(500).json({ error: "Failed to parse AI response", raw: content });
+      return res.status(200).json({
+  HDURL: { url: "", price: "" },
+  LURL: { url: "", price: "" },
+  AMZNURL: { url: "", price: "" },
+  TSCURL: { url: "", price: "" },
+  MCURL: { url: "", price: "" },
+  OTHERURL: { url: content, price: "" }
+});
+
     }
   } catch (error) {
     console.error("🚨 AI Request Failed:", error);
