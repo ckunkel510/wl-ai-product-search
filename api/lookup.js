@@ -34,9 +34,11 @@ Return a JSON like:
 
   const content = data.choices?.[0]?.message?.content;
   try {
-    const json = JSON.parse(content);
-    return res.status(200).json(json);
-  } catch (e) {
-    return res.status(500).json({ error: "Failed to parse AI response", raw: content });
-  }
+  const json = JSON.parse(content);
+  return res.status(200).json(json);
+} catch (e) {
+  console.error("RAW AI RESPONSE:", content); // 👈 add this for debug
+  return res.status(500).json({ error: "Failed to parse AI response", raw: content });
+}
+
 }
